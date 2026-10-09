@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创意AI · 一站式AI多媒体创意平台</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Cpath d='M22 22l20 10-20 10z' fill='%23fff'/%3E%3Ccircle cx='46' cy='18' r='4' fill='%2310B9E1'/%3E%3C/svg%3E">
+<style>
+/* ========================================
+   创意AI · 统一设计系统
+   ======================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* 品牌色 */
+  --brand:#0F172A; --brand2:#1E293B;
+  --cyan:#10B9E1; --cyan-dim:rgba(16,185,225,.12);
+  --orange:#F97316; --orange-dim:rgba(249,115,22,.12);
+  --violet:#8B5CF6; --violet-dim:rgba(139,92,246,.12);
+  --pink:#EC4899; --emerald:#10B981; --rose:#F43F5E;
+  /* 中性色 */
+  --bg:#F8FAFC; --bg2:#F1F5F9;
+  --card:#FFFFFF; --card2:#F8FAFC;
+  --line:#E2E8F0; --line2:#CBD5E1;
+  --ink:#0F172A; --sub:#64748B; --dim:#94A3B8;
+  --dark-bg:#0F172A; --dark-card:#1E293B; --dark-card2:#1E293B;
+  --dark-line:#334155; --dark-text:#F1F5F9; --dark-sub:#94A3B8;
+  /* 功能色 */
+  --ok:#10B981; --warn:#F59E0B; --err:#EF4444;
+  /* 阴影 */
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06);
+  --shadow:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.12);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.16);
+  /* 圆角 */
+  --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:24px; --r-full:999px;
+  /* 过渡 */
+  --t:all .22s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:inherit}
+svg{display:block}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* ========================================
+   按钮系统
+   ======================================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:none;cursor:pointer;font-weight:600;font-size:14.5px;
+  border-radius:var(--r);transition:var(--t);white-space:nowrap;
+  padding:11px 24px;position:relative;overflow:hidden;
+}
+.btn svg{width:17px;height:17px}
+.btn-primary{
+  background:linear-gradient(135deg,var(--cyan),#0891B2);
+  color:#fff;box-shadow:0 4px 16px rgba(16,185,225,.3);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,225,.4)}
+.btn-accent{
+  background:linear-gradient(135deg,var(--orange),#EA580C);
+  color:#fff;box-shadow:0 4px 16px rgba(249,115,22,.3);
+}
+.btn-accent:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,.4)}
+.btn-ghost{background:var(--card);border:1.5px solid var(--line);color:var(--ink);padding:10px 22px}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);background:var(--cyan-dim)}
+.btn-lg{padding:15px 36px;font-size:16px;border-radius:var(--r-lg)}
+.btn-sm{padding:7px 16px;font-size:13px;border-radius:var(--r-sm)}
+.btn-white{background:#fff;color:var(--brand);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.btn-white:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.2)}
+
+/* ========================================
+   顶部导航
+   ======================================== */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(248,250,252,.85);
+  backdrop-filter:blur(20px) saturate(1.8);
+  -webkit-backdrop-filter:blur(20px) saturate(1.8);
+  border-bottom:1px solid rgba(226,232,240,.6);
+}
+.nav-in{display:flex;align-items:center;gap:32px;height:72px}
+.brand{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.brand-logo{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--brand),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(15,23,42,.2);
+}
+.brand-logo svg{width:22px;height:22px;stroke:#fff}
+.brand .bt{font-weight:800;font-size:18px;letter-spacing:-.3px;line-height:1.2}
+.brand .bt small{display:block;font-size:10.5px;font-weight:500;color:var(--dim);letter-spacing:2px;margin-top:1px}
+.nav-menu{display:flex;gap:4px;flex:1}
+.nav-menu a{
+  padding:9px 18px;border-radius:var(--r);font-size:14.5px;
+  color:var(--sub);font-weight:500;transition:var(--t);
+}
+.nav-menu a:hover{background:var(--bg2);color:var(--ink)}
+.nav-menu a.active{background:var(--cyan-dim);color:var(--cyan);font-weight:600}
+.nav-cta{display:flex;gap:10px;align-items:center}
+
+/* 移动端汉堡 */
+.nav-burger{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--ink)}
+.nav-burger svg{width:24px;height:24px}
+
+/* ========================================
+   Hero
+   ======================================== */
+.hero{position:relative;overflow:hidden;padding:80px 0 72px}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(1000px 500px at 15% -10%,rgba(16,185,225,.1),transparent 55%),
+    radial-gradient(900px 450px at 85% 0%,rgba(139,92,246,.08),transparent 55%),
+    radial-gradient(600px 400px at 50% 110%,rgba(249,115,22,.06),transparent 55%);
+}
+.hero::after{
+  content:"";position:absolute;right:-100px;top:-60px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(16,185,225,.08),transparent 65%);
+  pointer-events:none;
+}
+/* 网格装饰 */
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(15,23,42,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(15,23,42,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,black,transparent);
+  -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 40%,black,transparent);
+}
+.hero-in{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-full);padding:7px 18px;
+  font-size:13px;color:var(--cyan);font-weight:600;
+  margin-bottom:24px;box-shadow:var(--shadow-sm);
+}
+.hero-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:52px;line-height:1.15;font-weight:900;letter-spacing:-1.5px}
+.hero h1 em{
+  font-style:normal;
+  background:linear-gradient(120deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p.sub{margin:24px 0 32px;font-size:17px;color:var(--sub);max-width:520px;line-height:1.7}
+.hero-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.hero-note{display:flex;gap:28px;margin-top:48px;flex-wrap:wrap}
+.hero-note .hn{display:flex;gap:10px;align-items:center;font-size:13.5px;color:var(--sub);font-weight:500}
+.hero-note .check{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:var(--cyan-dim);display:flex;align-items:center;justify-content:center;
+}
+.hero-note .check svg{width:13px;height:13px;stroke:var(--cyan);stroke-width:3}
+
+/* Hero 视觉卡片 */
+.hero-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.hc{
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  background:var(--card);border:1px solid var(--line);
+  box-shadow:var(--shadow-lg);
+}
+.hc-img{
+  width:100%;aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;position:relative;overflow:hidden;
+}
+.hc:nth-child(1){grid-row:span 2}
+.hc:nth-child(1) .hc-img{aspect-ratio:auto;height:100%;min-height:280px}
+.hc-img::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(16,185,225,.15),rgba(139,92,246,.15));
+}
+.hc .cap{
+  position:absolute;left:12px;bottom:12px;
+  background:rgba(15,23,42,.75);color:#fff;font-size:12px;
+  padding:6px 14px;border-radius:var(--r-full);
+  backdrop-filter:blur(8px);font-weight:500;
+}
+
+/* ========================================
+   区块通用
+   ======================================== */
+.sec{padding:72px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;gap:16px;flex-wrap:wrap}
+.sec-head .eyebrow{
+  font-size:12px;font-weight:700;color:var(--cyan);
+  letter-spacing:4px;margin-bottom:10px;text-transform:uppercase;
+}
+.sec-head h2{font-size:34px;font-weight:900;letter-spacing:-.5px;line-height:1.2}
+.sec-head p{color:var(--sub);font-size:15px;margin-top:10px;max-width:560px}
+.sec-head a.more{
+  font-size:14px;color:var(--cyan);font-weight:600;
+  white-space:nowrap;display:inline-flex;align-items:center;gap:6px;
+  transition:var(--t);padding:8px 16px;border-radius:var(--r);
+  background:var(--cyan-dim);
+}
+.sec-head a.more:hover{gap:10px;box-shadow:var(--shadow-sm)}
+
+/* ========================================
+   能力矩阵
+   ======================================== */
+.cats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.cat{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:26px 22px;
+  cursor:pointer;transition:var(--t);position:relative;overflow:hidden;
+}
+.cat::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,transparent);
+  opacity:0;transition:var(--t);
+}
+.cat:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:transparent}
+.cat:hover::before{opacity:1}
+.cat:nth-child(1)::before{background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.cat:nth-child(2)::before{background:linear-gradient(90deg,var(--orange),var(--warn))}
+.cat:nth-child(3)::before{background:linear-gradient(90deg,var(--violet),var(--pink))}
+.cat:nth-child(4)::before{background:linear-gradient(90deg,var(--emerald),var(--cyan))}
+.cat:nth-child(5)::before{background:linear-gradient(90deg,var(--rose),var(--orange))}
+.cat .ic{
+  width:48px;height:48px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;transition:var(--t);
+}
+.cat:hover .ic{transform:scale(1.08)}
+.cat .ic svg{width:24px;height:24px;stroke:#fff;stroke-width:2}
+.cat h3{font-size:16.5px;font-weight:700;margin-bottom:6px}
+.cat p{font-size:13px;color:var(--sub);line-height:1.6}
+.cat small{
+  display:inline-flex;align-items:center;gap:4px;
+  margin-top:14px;font-size:12.5px;color:var(--cyan);
+  font-weight:600;transition:var(--t);
+}
+.cat:hover small{gap:8px}
+.ic-a{background:linear-gradient(135deg,#0EA5E9,#10B9E1)}
+.ic-b{background:linear-gradient(135deg,#F97316,#FBBF24)}
+.ic-c{background:linear-gradient(135deg,#8B5CF6,#C084FC)}
+.ic-d{background:linear-gradient(135deg,#059669,#34D399)}
+.ic-e{background:linear-gradient(135deg,#E11D48,#FB7185)}
+
+/* ========================================
+   精选案例
+   ======================================== */
+.cases-band{background:var(--bg2);border-radius:var(--r-xl);padding:60px 32px;border:1px solid var(--line)}
+.case-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.case{
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  cursor:pointer;background:var(--card);border:1px solid var(--line);
+  transition:var(--t);box-shadow:var(--shadow-sm);
+}
+.case:hover{transform:translateY(-6px);box-shadow:var(--shadow-xl);border-color:transparent}
+.case-img{
+  width:100%;aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;position:relative;
+}
+.case-img::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(16,185,225,.1),rgba(139,92,246,.12));
+}
+.case .cname{
+  position:absolute;left:0;right:0;bottom:0;
+  padding:36px 14px 12px;
+  background:linear-gradient(transparent,rgba(15,23,42,.88));
+  color:#fff;font-size:13.5px;font-weight:600;
+}
+.case .cname small{display:block;font-weight:400;font-size:11.5px;opacity:.75;margin-top:2px}
+.case .overlay{
+  position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;gap:8px;
+  background:rgba(15,23,42,.55);opacity:0;transition:var(--t);
+  backdrop-filter:blur(4px);
+}
+.case:hover .overlay{opacity:1}
+.case .overlay button{
+  border:none;font-size:12.5px;font-weight:700;
+  padding:8px 16px;border-radius:var(--r-sm);cursor:pointer;
+  transition:var(--t);transform:translateY(8px);
+}
+.case:hover .overlay button{transform:translateY(0)}
+.overlay .ov-view{background:#fff;color:var(--brand);transition-delay:.04s}
+.overlay .ov-copy{background:var(--cyan);color:#fff;transition-delay:.08s}
+.overlay button:hover{transform:translateY(-2px) scale(1.04) !important}
+
+/* ========================================
+   统计条
+   ======================================== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:60px}
+.stat{
+  text-align:center;padding:28px 16px;
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-lg);
+}
+.stat .num{
+  font-size:36px;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.stat .lbl{font-size:13.5px;color:var(--sub);margin-top:6px;font-weight:500}
+
+/* ========================================
+   CTA
+   ======================================== */
+.cta-band{
+  position:relative;overflow:hidden;border-radius:var(--r-xl);
+  background:linear-gradient(135deg,var(--brand) 0%,#1E3A5F 50%,#0E7490 100%);
+  color:#fff;padding:72px 48px;text-align:center;
+}
+.cta-band::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(500px 250px at 80% 120%,rgba(249,115,22,.3),transparent 60%),
+    radial-gradient(400px 200px at 20% -20%,rgba(16,185,225,.3),transparent 60%);
+}
+.cta-band::after{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.cta-band h2{font-size:36px;font-weight:900;position:relative;z-index:2;letter-spacing:-.5px}
+.cta-band p{position:relative;z-index:2;margin:14px auto 32px;font-size:16px;opacity:.85;max-width:540px}
+.cta-band .btn{position:relative;z-index:2}
+
+/* ========================================
+   页脚
+   ======================================== */
+.footer{border-top:1px solid var(--line);padding:48px 0 40px;background:var(--card)}
+.foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:36px}
+.foot-brand{max-width:320px}
+.foot-brand .brand{margin-bottom:14px}
+.foot-brand p{font-size:13.5px;color:var(--sub);line-height:1.7}
+.foot-links{display:flex;gap:72px;flex-wrap:wrap}
+.foot-links h4{font-size:13.5px;font-weight:700;margin-bottom:16px;color:var(--ink)}
+.foot-links a{display:block;font-size:13.5px;color:var(--sub);padding:5px 0;transition:var(--t)}
+.foot-links a:hover{color:var(--cyan);transform:translateX(3px)}
+.foot-bot{
+  padding-top:24px;border-top:1px solid var(--line);
+  display:flex;gap:28px;flex-wrap:wrap;font-size:12.5px;color:var(--dim);
+}
+.foot-bot a:hover{color:var(--cyan)}
+
+/* ========================================
+   Toast
+   ======================================== */
+.toast{
+  position:fixed;left:50%;bottom:48px;transform:translateX(-50%) translateY(20px);
+  background:var(--brand);color:#fff;padding:13px 28px;
+  border-radius:var(--r-full);font-size:14px;font-weight:500;
+  z-index:9999;box-shadow:0 12px 40px rgba(0,0,0,.3);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  opacity:0;pointer-events:none;max-width:86vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ========================================
+   响应式
+   ======================================== */
+@media(max-width:1100px){
+  .cats{grid-template-columns:repeat(3,1fr)}
+  .case-grid{grid-template-columns:repeat(3,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .hero-in{grid-template-columns:1fr;gap:40px}
+  .hero h1{font-size:40px}
+  .nav-menu{display:none}
+  .nav-burger{display:block}
+  .cats{grid-template-columns:repeat(2,1fr)}
+  .case-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-links{gap:40px}
+}
+@media(max-width:600px){
+  .hero{padding:52px 0 48px}
+  .hero h1{font-size:30px;letter-spacing:-.5px}
+  .hero p.sub{font-size:15px}
+  .sec{padding:48px 0}
+  .sec-head h2{font-size:26px}
+  .cats{grid-template-columns:1fr}
+  .case-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .hero-cards{grid-template-columns:1fr}
+  .hero-cards .hc:first-child{grid-row:auto}
+  .hero-cards .hc:first-child .hc-img{min-height:200px}
+  .cases-band{padding:36px 16px}
+  .cta-band{padding:48px 24px}
+  .cta-band h2{font-size:26px}
+  .foot-in{flex-direction:column;gap:28px}
+  .foot-top{flex-direction:column}
+  .foot-links{gap:32px}
+  .btn-lg{padding:13px 28px;font-size:15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="index.html">
+      <span class="brand-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </span>
+      <span class="bt">创意AI<small>创意无界 · AI 生成</small></span>
+    </a>
+    <nav class="nav-menu">
+      <a href="index.html" class="active">首页</a>
+      <a href="dashboard.html">工作台</a>
+      <a href="image-creation.html">图片制作</a>
+      <a href="dashboard.html">视频制作</a>
+      <a href="dashboard.html">无限画布</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-ghost">登录</a>
+      <a href="login.html" class="btn btn-primary">开始使用</a>
+    </div>
+    <button class="nav-burger" onclick="toast('移动端菜单开发中')" aria-label="菜单">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="wrap hero-in">
+    <div>
+      <span class="hero-tag"><span class="dot"></span>专注电商领域的 AIGC 全链路服务平台</span>
+      <h1>一站式 AI 多媒体<br><em>创意平台</em></h1>
+      <p class="sub">一键生成电商图、营销图等多种风格的图片、文案、视频，深度创作 AI 素材和内容。从商品白底图到爆款复刻，全链路专业服务。</p>
+      <div class="hero-actions">
+        <a href="login.html" class="btn btn-primary btn-lg">
+          立即开始创作
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#cases" class="btn btn-ghost btn-lg">浏览精选案例</a>
+      </div>
+      <div class="hero-note">
+        <span class="hn"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>40+ 专业创作模板</span>
+        <span class="hn"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>全场景覆盖</span>
+        <span class="hn"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>图片/视频/文案一站式</span>
+      </div>
+    </div>
+    <div class="hero-cards">
+      <div class="hc">
+        <div class="hc-img" style="background:linear-gradient(145deg,#0F172A,#1E3A5F)">🎨</div>
+        <span class="cap">极简日系饮品海报</span>
+      </div>
+      <div class="hc">
+        <div class="hc-img" style="background:linear-gradient(145deg,#1E1B4B,#4C1D95)">🥤</div>
+        <span class="cap">汽水广告九宫格</span>
+      </div>
+      <div class="hc">
+        <div class="hc-img" style="background:linear-gradient(145deg,#450A0A,#991B1B)">🍳</div>
+        <span class="cap">食物爆炸瞬间</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 能力矩阵 ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Capabilities</div>
+        <h2>覆盖创作全流程的能力矩阵</h2>
+        <p>从商品图、营销图到视频与文案，一个平台解决电商 AIGC 所有需求</p>
+      </div>
+      <a class="more" href="image-creation.html">
+        查看全部应用
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="cats">
+      <div class="cat" onclick="location.href='image-creation.html'">
+        <span class="ic ic-a"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span>
+        <h3>电商营销</h3>
+        <p>批量出图、海报设计、商品场景展示、模特换背景</p>
+        <small>批量出图电商图 →</small>
+      </div>
+      <div class="cat" onclick="location.href='image-creation.html'">
+        <span class="ic ic-b"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 4.9L20 8l-4 4 1 5.6-5-2.6-5 2.6L8 12l-4-4 5.6-1.1z"/></svg></span>
+        <h3>创意应用</h3>
+        <p>分镜图、Logo 风格转换、中文海报、多语言翻译</p>
+        <small>一键生成分镜图 →</small>
+      </div>
+      <div class="cat" onclick="location.href='image-creation.html'">
+        <span class="ic ic-c"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6L12 21 3.8 6"/><path d="M12 21L7.5 6"/><path d="M12 21l4.5-15"/></svg></span>
+        <h3>人像摄影</h3>
+        <p>AI 证件照、真人转漫画、换发型换脸、高清修复</p>
+        <small>AI 证件照 →</small>
+      </div>
+      <div class="cat" onclick="location.href='image-creation.html'">
+        <span class="ic ic-d"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22L15 9"/><path d="M6 22L18 10"/><path d="M10 22L19 13"/><path d="M14 22l6-6"/><path d="M14 2h6"/><path d="M16 4v6"/></svg></span>
+        <h3>建筑室内</h3>
+        <p>平面转效果图、装修风格转换、3D 模型渲染</p>
+        <small>装修风格转换 →</small>
+      </div>
+      <div class="cat" onclick="location.href='image-creation.html'">
+        <span class="ic ic-e"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="M4 16l4-4 3 3 3-3 6 6"/></svg></span>
+        <h3>绘画模型</h3>
+        <p>智能图片 G2、即梦 seedream5.0pro 等专业模型</p>
+        <small>智能图片 G2 →</small>
+      </div>
+    </div>
+
+    <!-- 统计 -->
+    <div class="stats">
+      <div class="stat"><div class="num">40+</div><div class="lbl">专业创作应用</div></div>
+      <div class="stat"><div class="num">500K+</div><div class="lbl">累计生成作品</div></div>
+      <div class="stat"><div class="num">10+</div><div class="lbl">AI 模型驱动</div></div>
+      <div class="stat"><div class="num">99.9%</div><div class="lbl">服务可用性</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 精选案例 ===== -->
+<section class="sec" id="cases">
+  <div class="wrap">
+    <div class="cases-band">
+      <div class="sec-head">
+        <div>
+          <div class="eyebrow">Featured Cases</div>
+          <h2>精选案例 · 一键同款</h2>
+          <p>专业团队与电商达人的真实创作，点击即可复刻同款</p>
+        </div>
+        <a class="more" href="image-creation.html">
+          进入图片制作
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="case-grid">
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#FEF3C7,#FDE68A)">🍊</div>
+          <span class="cname">清爽叙事海报<small>橙柚清爽黑咖</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#FCE7F3,#FBCFE8)">👜</div>
+          <span class="cname">奢侈时尚广告海报<small>未来派时尚</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#DBEAFE,#BFDBFE)">✨</div>
+          <span class="cname">光场特效广告海报<small>高端品牌产品</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#FED7AA,#FDBA74)">🍖</div>
+          <span class="cname">高端食品商业摄影<small>广告级质感</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#E0E7FF,#C7D2FE)">🎬</div>
+          <span class="cname">电影级商业摄影<small>奢华光影</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#D1FAE5,#A7F3D0)">💆</div>
+          <span class="cname">养生按摩宣传<small>传统文化仪式感</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#CFFAFE,#A5F3FC)">🧊</div>
+          <span class="cname">极地冰封巨型海报<small>场景化广告</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+        <div class="case" onclick="location.href='login.html'">
+          <div class="case-img" style="background:linear-gradient(145deg,#EDE9FE,#DDD6FE)">🪂</div>
+          <span class="cname">蓝白降落伞悬浮<small>3D 渲染广告</small></span>
+          <span class="overlay"><button class="ov-view" type="button">查看详情</button><button class="ov-copy" type="button">一键同款</button></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="sec" style="padding-top:24px">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>现在就开始你的 AI 创作之旅</h2>
+      <p>登录后即可使用全部 40+ 创作应用，图片、视频、文案一站式生成</p>
+      <a href="login.html" class="btn btn-white btn-lg">
+        免费开始使用
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </span>
+          <span class="bt">创意AI<small>创意无界 · AI 生成</small></span>
+        </a>
+        <p>创意AI —— 一站式 AI 多媒体创意平台，专注电商领域 AIGC 全链路专业服务。</p>
+      </div>
+      <div class="foot-links">
+        <div>
+          <h4>创作中心</h4>
+          <a href="image-creation.html">图片制作</a>
+          <a href="dashboard.html">视频制作</a>
+          <a href="dashboard.html">无限画布</a>
+        </div>
+        <div>
+          <h4>学习成长</h4>
+          <a href="login.html">AI 米核学院</a>
+          <a href="login.html">AI 技能变现</a>
+          <a href="login.html">使用手册</a>
+        </div>
+        <div>
+          <h4>我的</h4>
+          <a href="login.html">我的资产</a>
+          <a href="login.html">我的作品</a>
+          <a href="login.html">意见反馈</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <a href="https://beian.mps.gov.cn/" target="_blank" rel="noopener">公安备案号：京18888888000</a>
+      <a href="https://tsm.miit.gov.cn/" target="_blank" rel="noopener">增值电信业务经营许可证：京18888888000</a>
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">ICP域名备案号：京18888888000</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toast(msg){
+  let el=document.querySelector('.toast');
+  if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);
+}
+document.querySelectorAll('.case .overlay button').forEach(b=>{
+  b.addEventListener('click',e=>{
+    e.stopPropagation();
+    toast(b.classList.contains('ov-copy')?'已发起一键同款':'演示版：查看详情');
+  });
+});
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Header
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import DbSession
+from app.api.deps import CurrentUser, DbSession
 from app.core.config import settings
 from app.core.response import ok
 from app.core.security import decode_access_token, extract_bearer_token
@@ -28,6 +28,18 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     phone: str = Field(min_length=11, max_length=11)
     code: str = Field(min_length=6, max_length=6)
+
+
+@router.get("/me")
+async def me(user: CurrentUser) -> dict:
+    return ok(
+        {
+            "user_id": user.id,
+            "phone": user.phone,
+            "is_admin": bool(user.is_admin),
+            "credit_balance": float(user.credit_balance or 0),
+        }
+    )
 
 
 @router.post("/sms-code")

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图片制作 · 创意AI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Cpath d='M22 22l20 10-20 10z' fill='%23fff'/%3E%3Ccircle cx='46' cy='18' r='4' fill='%2310B9E1'/%3E%3C/svg%3E">
+<style>
+/* ========================================
+   创意AI · 统一设计系统（图片制作/深色）
+   ======================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cyan:#10B9E1; --cyan-dim:rgba(16,185,225,.14);
+  --orange:#F97316; --orange-dim:rgba(249,115,22,.14);
+  --violet:#8B5CF6; --violet-dim:rgba(139,92,246,.14);
+  --pink:#EC4899; --emerald:#10B981; --rose:#F43F5E; --amber:#F59E0B;
+  --bg:#0B0F17; --panel:#0F141F; --card:#151B28; --card2:#1A2133;
+  --line:#242C3E; --line2:#2E3850;
+  --text:#EEF2F8; --sub:#8B95AB; --dim:#5A6478;
+  --ok:#10B981; --warn:#F59E0B; --err:#EF4444; --gold:#FCD34D;
+  --shadow:0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.45);
+  --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:24px; --r-full:999px;
+  --t:all .22s cubic-bezier(.4,0,.2,1);
+}
+body{
+  font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  height:100vh;display:flex;flex-direction:column;overflow:hidden;
+}
+a{color:inherit;text-decoration:none}
+img{display:block}
+svg{display:block}
+button{font-family:inherit}
+
+/* ========================================
+   优惠横幅
+   ======================================== */
+.banner{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  background:linear-gradient(90deg,#1C1405,#3D2A08,#1C1405);
+  color:#FDE68A;font-size:13px;padding:10px 18px;
+  position:relative;z-index:60;border-bottom:1px solid #3D2A08;
+}
+.banner .detail{color:#FBBF24;font-weight:700;cursor:pointer;white-space:nowrap;transition:var(--t)}
+.banner .detail:hover{color:#FDE68A}
+
+/* ========================================
+   布局
+   ======================================== */
+.layout{flex:1;display:flex;min-height:0}
+
+/* ========================================
+   左侧导航（与 dashboard 统一）
+   ======================================== */
+.sidebar{
+  width:232px;background:var(--panel);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;flex-shrink:0;transition:var(--t);
+}
+.side-brand{
+  display:flex;align-items:center;gap:12px;
+  padding:20px 18px 16px;border-bottom:1px solid var(--line);
+}
+.side-logo{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--cyan),#0891B2);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(16,185,225,.3);
+}
+.side-logo svg{width:20px;height:20px;stroke:#fff}
+.side-brand b{font-size:16.5px;letter-spacing:-.3px;display:block}
+.side-brand small{font-size:10px;color:var(--dim);letter-spacing:2px;display:block;margin-top:1px}
+.nav-group{
+  font-size:10.5px;font-weight:700;color:var(--dim);
+  letter-spacing:2px;padding:18px 20px 8px;text-transform:uppercase;
+}
+.side-nav{flex:1;overflow-y:auto;padding:4px 12px 14px}
+.side-nav::-webkit-scrollbar{width:5px}
+.side-nav::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;border-radius:var(--r);font-size:14px;
+  color:var(--sub);cursor:pointer;transition:var(--t);
+  margin-bottom:3px;position:relative;
+}
+.nav-item svg{width:18px;height:18px;stroke:currentColor;flex-shrink:0;stroke-width:2}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.on{
+  background:linear-gradient(90deg,var(--cyan-dim),transparent);
+  color:var(--cyan);font-weight:600;
+}
+.nav-item.on::before{
+  content:"";position:absolute;left:0;top:9px;bottom:9px;
+  width:3px;border-radius:3px;background:var(--cyan);
+}
+.nav-item .tag{
+  font-size:10px;background:var(--orange);color:#fff;
+  border-radius:5px;padding:2px 7px;margin-left:auto;font-weight:800;
+}
+.nav-item .tag2{
+  font-size:10px;background:var(--cyan-dim);color:var(--cyan);
+  border:1px solid rgba(16,185,225,.3);
+  border-radius:5px;padding:1px 7px;margin-left:auto;font-weight:800;
+}
+.side-foot{
+  padding:14px 18px;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;font-size:13px;color:var(--sub);
+}
+.side-foot .links{display:flex;gap:14px;flex:1}
+.side-foot a{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--dim);transition:var(--t)}
+.side-foot a:hover{color:var(--cyan)}
+.side-foot a svg{width:15px;height:15px}
+.avatar{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;font-weight:800;flex-shrink:0;
+}
+
+/* ========================================
+   主区
+   ======================================== */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-y:auto}
+.main::-webkit-scrollbar{width:7px}
+.main::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:16px;padding:14px 28px;
+  background:rgba(11,15,23,.88);
+  backdrop-filter:blur(16px) saturate(1.6);
+  -webkit-backdrop-filter:blur(16px) saturate(1.6);
+  border-bottom:1px solid var(--line);
+}
+.topbar .crumb{font-size:15.5px;font-weight:800;letter-spacing:-.2px}
+.topbar .crumb small{display:block;font-size:11.5px;color:var(--dim);font-weight:400;margin-top:2px}
+.topbar .spacer{flex:1}
+.points{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--line);
+  padding:8px 16px;border-radius:var(--r-full);
+  font-size:13.5px;font-weight:800;transition:var(--t);cursor:pointer;
+}
+.points:hover{border-color:var(--line2)}
+.points svg{width:16px;height:16px;stroke:var(--gold)}
+.top-link{
+  padding:8px 16px;border-radius:var(--r-full);
+  border:1px solid var(--line);background:var(--card);
+  color:var(--sub);font-size:13px;font-weight:600;
+  cursor:pointer;transition:var(--t);
+}
+.top-link:hover{color:var(--text);border-color:var(--line2);transform:translateY(-1px)}
+.vip-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 20px;border-radius:var(--r-full);border:none;
+  cursor:pointer;font-size:13.5px;font-weight:800;
+  background:linear-gradient(135deg,#F59E0B,#EA580C);
+  color:#fff;box-shadow:0 4px 16px rgba(249,115,22,.35);
+  transition:var(--t);
+}
+.vip-btn svg{width:15px;height:15px;stroke:#fff}
+.vip-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(249,115,22,.45)}
+
+/* ===== 内容 ===== */
+.content{padding:28px 28px 72px}
+.page-title{margin-bottom:24px}
+.page-title h1{font-size:24px;font-weight:900;letter-spacing:-.4px}
+.page-title p{font-size:14px;color:var(--dim);margin-top:6px}
+
+/* 搜索框（新增组件） */
+.search-bar{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:26px;flex-wrap:wrap;
+}
+.search-input{
+  display:flex;align-items:center;gap:10px;flex:1;min-width:260px;
+  background:var(--card);border:1.5px solid var(--line);
+  border-radius:var(--r);padding:0 16px;height:46px;
+  transition:var(--t);
+}
+.search-input:focus-within{border-color:var(--cyan);box-shadow:0 0 0 4px var(--cyan-dim)}
+.search-input svg{width:18px;height:18px;stroke:var(--dim);flex-shrink:0}
+.search-input input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-size:14.5px;font-family:inherit;height:100%;
+}
+.search-input input::placeholder{color:var(--dim)}
+
+/* 快捷功能 */
+.quick{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:34px}
+.quick .func{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:20px 16px;
+  cursor:pointer;transition:var(--t);position:relative;overflow:hidden;
+}
+.quick .func:hover{transform:translateY(-4px);border-color:var(--line2);box-shadow:var(--shadow-lg)}
+.quick .fic{
+  width:42px;height:42px;border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;transition:var(--t);
+}
+.quick .func:hover .fic{transform:scale(1.08)}
+.quick .fic svg{width:21px;height:21px;stroke:#fff}
+.quick h3{font-size:14.5px;font-weight:700;margin-bottom:5px}
+.quick p{font-size:12px;color:var(--dim);line-height:1.55}
+.fic-a{background:linear-gradient(135deg,#F97316,#FBBF24)}
+.fic-b{background:linear-gradient(135deg,#0EA5E9,#10B9E1)}
+.fic-c{background:linear-gradient(135deg,#8B5CF6,#C084FC)}
+.fic-d{background:linear-gradient(135deg,#059669,#34D399)}
+.fic-e{background:linear-gradient(135deg,#E11D48,#FB7185)}
+.fic-f{background:linear-gradient(135deg,#F59E0B,#FCD34D)}
+
+/* 分类 tab */
+.filter-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;margin-bottom:20px;flex-wrap:wrap;
+}
+.filter-bar h2{font-size:19px;font-weight:900;letter-spacing:-.3px}
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.cat-tabs button{
+  padding:9px 18px;border-radius:var(--r-full);
+  border:1px solid var(--line);background:var(--card);
+  color:var(--sub);font-size:13.5px;font-weight:600;
+  cursor:pointer;transition:var(--t);
+}
+.cat-tabs button:hover{color:var(--text);border-color:var(--line2)}
+.cat-tabs button.on{
+  background:var(--cyan);border-color:var(--cyan);
+  color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(16,185,225,.3);
+}
+
+/* 应用网格 */
+.app-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.app{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-lg);overflow:hidden;cursor:pointer;
+  transition:var(--t);
+}
+.app:hover{transform:translateY(-5px);border-color:var(--line2);box-shadow:var(--shadow-lg)}
+.app-img{
+  width:100%;aspect-ratio:4/3;
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;position:relative;
+}
+.app-img::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(16,185,225,.1),rgba(139,92,246,.1));
+}
+.app .info{padding:13px 14px 15px}
+.app .info h3{
+  font-size:14px;font-weight:700;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.app .info p{
+  font-size:12px;color:var(--dim);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.app .info .use{
+  margin-top:10px;display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:800;color:var(--cyan);
+  transition:var(--t);gap:4px;
+}
+.app:hover .info .use{gap:8px}
+.app .info .use svg{width:13px;height:13px}
+
+/* 空状态（新增组件） */
+.empty-state{
+  grid-column:1/-1;text-align:center;padding:64px 20px;
+  color:var(--dim);display:none;
+}
+.empty-state svg{width:48px;height:48px;stroke:var(--line2);margin:0 auto 16px}
+.empty-state h3{font-size:16px;color:var(--sub);margin-bottom:6px}
+.empty-state p{font-size:13.5px}
+
+/* 客服 */
+.support{
+  position:fixed;right:24px;bottom:28px;
+  width:54px;height:54px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--cyan),#0891B2);
+  color:#fff;border:none;cursor:pointer;
+  box-shadow:0 10px 30px rgba(16,185,225,.4);
+  z-index:80;transition:var(--t);
+}
+.support:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 14px 36px rgba(16,185,225,.5)}
+.support svg{width:22px;height:22px}
+
+/* Toast */
+.toast{
+  position:fixed;left:50%;bottom:48px;transform:translateX(-50%) translateY(20px);
+  background:#1E293B;color:#fff;padding:13px 28px;
+  border-radius:var(--r-full);font-size:14px;font-weight:500;
+  z-index:9999;box-shadow:0 12px 40px rgba(0,0,0,.5);
+  border:1px solid var(--line2);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  opacity:0;pointer-events:none;max-width:86vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ========================================
+   响应式
+   ======================================== */
+@media(max-width:1300px){
+  .app-grid{grid-template-columns:repeat(4,1fr)}
+  .quick{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:1000px){
+  .app-grid{grid-template-columns:repeat(3,1fr)}
+  .quick{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .sidebar{width:68px}
+  .side-brand b,.side-brand small,.nav-item span,.nav-group,.side-foot .links{display:none}
+  .nav-item{justify-content:center;padding:12px 0}
+  .nav-item .tag,.nav-item .tag2{display:none}
+  .side-foot{justify-content:center}
+  .app-grid{grid-template-columns:repeat(2,1fr)}
+  .banner{font-size:11.5px;flex-wrap:wrap}
+}
+@media(max-width:600px){
+  .topbar{padding:12px 16px;flex-wrap:wrap}
+  .content{padding:18px 16px 80px}
+  .app-grid{grid-template-columns:repeat(2,1fr)}
+  .quick{grid-template-columns:1fr 1fr}
+  .page-title h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 优惠横幅 ===== -->
+<div class="banner">
+  <span>【限时优惠】购买会员享 300 张 image2 1K 免费送、OPC-image2 1K 使用低至 0.1 积分【会员、OPC 享受 SD 系列模型 9.4 折】</span>
+  <span class="detail" onclick="toast('演示版：会员详情')">【详情查看】</span>
+</div>
+
+<div class="layout">
+  <!-- ===== 左侧导航 ===== -->
+  <aside class="sidebar">
+    <a class="side-brand" href="index.html">
+      <span class="side-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </span>
+      <div><b>创意AI</b><small>创意无界 · AI 生成</small></div>
+    </a>
+
+    <nav class="side-nav">
+      <div class="nav-group">创作</div>
+      <a class="nav-item" href="dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
+        <span>首页</span>
+      </a>
+      <a class="nav-item on" href="image-creation.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>图片制作</span>
+      </a>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：视频制作')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M10 9l5 3-5 3z"/></svg>
+        <span>视频制作</span>
+      </a>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：无限画布')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+        <span>无限画布</span>
+      </a>
+
+      <div class="nav-group">成长</div>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：AI 米核学院')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <span>AI 米核学院</span>
+        <span class="tag2">NEW</span>
+      </a>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：AI 技能变现')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <span>AI 技能变现</span>
+        <span class="tag">变现</span>
+      </a>
+
+      <div class="nav-group">我的</div>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：我的资产')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span>我的资产</span>
+      </a>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：我的作品')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        <span>我的作品</span>
+      </a>
+      <a class="nav-item" href="dashboard.html" onclick="toast('演示版：意见反馈')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>意见反馈</span>
+      </a>
+    </nav>
+
+    <div class="side-foot">
+      <span class="avatar">简</span>
+      <div class="links">
+        <a href="dashboard.html" onclick="toast('演示版：使用手册')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>手册
+        </a>
+        <a href="dashboard.html" onclick="toast('演示版：主题切换')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>主题
+        </a>
+        <a href="dashboard.html" onclick="toast('演示版：通知')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>通知
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== 主区 ===== -->
+  <div class="main">
+    <div class="topbar">
+      <div class="crumb">图片制作<small>40+ 专业电商创作应用 · 商品图 / 营销图 / 模特穿搭</small></div>
+      <div class="spacer"></div>
+      <div class="points" onclick="toast('演示版：积分明细')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>
+        0.00
+      </div>
+      <button class="top-link" onclick="toast('演示版：积分商城')">积分商城</button>
+      <button class="vip-btn" onclick="toast('演示版：会员中心')">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        开通会员
+      </button>
+    </div>
+
+    <div class="content">
+      <div class="page-title">
+        <h1>图片制作</h1>
+        <p>选择应用，上传素材，AI 一键生成专业电商图片</p>
+      </div>
+
+      <!-- 搜索框（新增组件） -->
+      <div class="search-bar">
+        <div class="search-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="搜索应用，如：海报、模特、白底图…">
+        </div>
+      </div>
+
+      <!-- 快捷功能 -->
+      <div class="quick">
+        <div class="func" onclick="toast('演示版：商品套图')">
+          <span class="fic fic-a"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+          <h3>商品套图</h3><p>生成适配电商平台的套图方案</p>
+        </div>
+        <div class="func" onclick="toast('演示版：A+ 内容')">
+          <span class="fic fic-b"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg></span>
+          <h3>A+ 内容</h3><p>电商详情页 A+ 内容结构</p>
+        </div>
+        <div class="func" onclick="toast('演示版：详情图')">
+          <span class="fic fic-c"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+          <h3>详情图</h3><p>详情图结构与文案方案</p>
+        </div>
+        <div class="func" onclick="toast('演示版：图片复刻')">
+          <span class="fic fic-d"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="13" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 13h10"/><path d="M13 8v10"/></svg></span>
+          <h3>图片复刻</h3><p>同风格、同构图复刻</p>
+        </div>
+        <div class="func" onclick="toast('演示版：去除背景')">
+          <span class="fic fic-e"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M4 7l13 13"/><path d="M14 4l6 6"/><path d="M10 4l-4 4"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/></svg></span>
+          <h3>去除背景</h3><p>一键生成透明底/纯色底</p>
+        </div>
+        <div class="func" onclick="toast('演示版：AI 换装')">
+          <span class="fic fic-f"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a2 2 0 0 0 1.99 1.68H5a2 2 0 0 1 2 2V21h10v-8.16a2 2 0 0 1 2-2h.15a2 2 0 0 0 1.99-1.68l.58-3.47a2 2 0 0 0-1.34-2.23z"/></svg></span>
+          <h3>AI 换装</h3><p>一键换装 + 透明底商品图</p>
+        </div>
+      </div>
+
+      <!-- 分类 + 应用网格 -->
+      <div class="filter-bar">
+        <h2>全部应用</h2>
+        <div class="cat-tabs" id="catTabs">
+          <button class="on" data-cat="all">全部</button>
+          <button data-cat="poster">电商海报</button>
+          <button data-cat="model">模特穿搭</button>
+          <button data-cat="tool">电商工具</button>
+          <button data-cat="retouch">图片精修</button>
+        </div>
+      </div>
+
+      <div class="app-grid" id="appGrid">
+        <div class="app" data-cat="poster" data-name="极简日系饮品海报"><div class="app-img" style="background:linear-gradient(145deg,#FCE7F3,#FBCFE8)">🍵</div><div class="info"><h3>极简日系饮品海报</h3><p>主图 · 食材准备 · 制作步骤</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="穿搭拆解贴纸"><div class="app-img" style="background:linear-gradient(145deg,#FDF4FF,#FAE8FF)">👧</div><div class="info"><h3>穿搭拆解贴纸</h3><p>时尚手账风</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="产品剖面剧场广告"><div class="app-img" style="background:linear-gradient(145deg,#E0E7FF,#C7D2FE)">💊</div><div class="info"><h3>产品剖面剧场广告</h3><p>极简高级风</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="高端食品商业广告摄影"><div class="app-img" style="background:linear-gradient(145deg,#FED7AA,#FDBA74)">🍖</div><div class="info"><h3>高端食品商业摄影</h3><p>广告级质感</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="高端品牌产品光场特效商业广告海报"><div class="app-img" style="background:linear-gradient(145deg,#DBEAFE,#BFDBFE)">✨</div><div class="info"><h3>光场特效广告海报</h3><p>高端品牌产品</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="电影级高端产品爆炸瞬间海报"><div class="app-img" style="background:linear-gradient(145deg,#FEE2E2,#FECACA)">💥</div><div class="info"><h3>爆炸瞬间海报</h3><p>电影级高端产品</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="汽水广告九宫格"><div class="app-img" style="background:linear-gradient(145deg,#CFFAFE,#A5F3FC)">🥤</div><div class="info"><h3>汽水广告九宫格</h3><p>九宫格分镜</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="食物爆炸瞬间"><div class="app-img" style="background:linear-gradient(145deg,#FFF7ED,#FFEDD5)">🍳</div><div class="info"><h3>食物爆炸瞬间</h3><p>高速摄影电影质感</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="极地冰封巨型广告海报"><div class="app-img" style="background:linear-gradient(145deg,#ECFEFF,#CFFAFE)">🧊</div><div class="info"><h3>极地冰封巨型海报</h3><p>巨型广告海报</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="蓝白降落伞悬浮产品创意3D渲染广告"><div class="app-img" style="background:linear-gradient(145deg,#EDE9FE,#DDD6FE)">🪂</div><div class="info"><h3>蓝白降落伞悬浮</h3><p>3D 渲染广告</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="电影级商业摄影"><div class="app-img" style="background:linear-gradient(145deg,#EEF2FF,#E0E7FF)">🎬</div><div class="info"><h3>电影级商业摄影</h3><p>奢华光影</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="清爽叙事海报"><div class="app-img" style="background:linear-gradient(145deg,#FEF3C7,#FDE68A)">🍊</div><div class="info"><h3>清爽叙事海报</h3><p>叙事型海报</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="奢侈时尚广告海报"><div class="app-img" style="background:linear-gradient(145deg,#FCE7F3,#FBCFE8)">👜</div><div class="info"><h3>奢侈时尚广告海报</h3><p>未来派时尚</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="养生按摩宣传"><div class="app-img" style="background:linear-gradient(145deg,#D1FAE5,#A7F3D0)">💆</div><div class="info"><h3>养生按摩宣传</h3><p>传统文化仪式感</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="小红书爆款复刻"><div class="app-img" style="background:linear-gradient(145deg,#FFE4E6,#FECDD3)">📕</div><div class="info"><h3>小红书爆款复刻</h3><p>爆款图片复刻</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="识别产品卖点"><div class="app-img" style="background:linear-gradient(145deg,#ECFDF5,#D1FAE5)">🎯</div><div class="info"><h3>识别产品卖点</h3><p>AI 自动识别卖点</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="复刻详情页"><div class="app-img" style="background:linear-gradient(145deg,#EFF6FF,#DBEAFE)">📄</div><div class="info"><h3>复刻详情页</h3><p>竞品详情版式复刻</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="电商海报设计"><div class="app-img" style="background:linear-gradient(145deg,#FEF9C3,#FEF08A)">🛍️</div><div class="info"><h3>电商海报设计</h3><p>品牌海报视觉系统</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="批量出图电商图"><div class="app-img" style="background:linear-gradient(145deg,#DBEAFE,#BFDBFE)">📦</div><div class="info"><h3>批量出图电商图</h3><p>产品+模特+场景批量出图</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="产品展示批量图"><div class="app-img" style="background:linear-gradient(145deg,#ECFDF5,#D1FAE5)">🧴</div><div class="info"><h3>产品展示批量图</h3><p>白底图批量展示</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="提取模特穿搭"><div class="app-img" style="background:linear-gradient(145deg,#FDF4FF,#FAE8FF)">👗</div><div class="info"><h3>提取模特穿搭</h3><p>一键提取服装</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="电商场景加模特"><div class="app-img" style="background:linear-gradient(145deg,#FEF9C3,#FEF08A)">💃</div><div class="info"><h3>电商场景加模特</h3><p>动态姿势自动校准</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="一键模特换背景"><div class="app-img" style="background:linear-gradient(145deg,#ECFEFF,#CFFAFE)">🖼️</div><div class="info"><h3>一键模特换背景</h3><p>背景随心更换</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="商品场景展示"><div class="app-img" style="background:linear-gradient(145deg,#F0FDF4,#DCFCE7)">🏪</div><div class="info"><h3>商品场景展示</h3><p>智能商品展示图</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="电商图万物替换"><div class="app-img" style="background:linear-gradient(145deg,#EFF6FF,#DBEAFE)">🔄</div><div class="info"><h3>电商图万物替换</h3><p>指定物品替换</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="产品包装设计"><div class="app-img" style="background:linear-gradient(145deg,#FFEDD5,#FED7AA)">🎁</div><div class="info"><h3>产品包装设计</h3><p>根据产品设计包装</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="人物多姿势生成"><div class="app-img" style="background:linear-gradient(145deg,#F5F3FF,#EDE9FE)">🕺</div><div class="info"><h3>人物多姿势生成</h3><p>参考图多姿态动作</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="retouch" data-name="电商产品和模特精修"><div class="app-img" style="background:linear-gradient(145deg,#ECFEFF,#A5F3FC)">✨</div><div class="info"><h3>电商产品和模特精修</h3><p>去毛刺/褶皱/美颜</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="retouch" data-name="照片高质量精修"><div class="app-img" style="background:linear-gradient(145deg,#EFF6FF,#DBEAFE)">🔍</div><div class="info"><h3>照片高质量精修</h3><p>一键还原高清画质</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="retouch" data-name="商品风格材质更换"><div class="app-img" style="background:linear-gradient(145deg,#FDF2F8,#FCE7F3)">🎨</div><div class="info"><h3>商品风格材质更换</h3><p>材质效果可见</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="retouch" data-name="画面主体迁移融合"><div class="app-img" style="background:linear-gradient(145deg,#F0FDF4,#DCFCE7)">🪄</div><div class="info"><h3>画面主体迁移融合</h3><p>一键迁移主体</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="poster" data-name="爆款商品文字海报"><div class="app-img" style="background:linear-gradient(145deg,#FEE2E2,#FECACA)">🏷️</div><div class="info"><h3>爆款商品文字海报</h3><p>一键制作爆款海报</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="提取电商白底图"><div class="app-img" style="background:linear-gradient(145deg,#F8FAFC,#E2E8F0)">⬜</div><div class="info"><h3>提取电商白底图</h3><p>去杂边/补投影</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="跨境电商图文翻译"><div class="app-img" style="background:linear-gradient(145deg,#EFF6FF,#DBEAFE)">🌐</div><div class="info"><h3>跨境电商图文翻译</h3><p>自动翻译自动生图</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="OOTD服装穿搭"><div class="app-img" style="background:linear-gradient(145deg,#FDF4FF,#FAE8FF)">👕</div><div class="info"><h3>OOTD 服装穿搭</h3><p>多件单品一次搭配</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="模特试穿试戴"><div class="app-img" style="background:linear-gradient(145deg,#F1F5F9,#E2E8F0)">👗</div><div class="info"><h3>模特试穿试戴</h3><p>项链/耳饰/眼镜/帽子</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="模特试鞋"><div class="app-img" style="background:linear-gradient(145deg,#FFF7ED,#FFEDD5)">👟</div><div class="info"><h3>模特试鞋</h3><p>一键生成试鞋效果</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="商品多角度多视图"><div class="app-img" style="background:linear-gradient(145deg,#ECFEFF,#CFFAFE)">🧊</div><div class="info"><h3>商品多角度多视图</h3><p>多角度展示图</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="tool" data-name="商品宣传爆款复刻"><div class="app-img" style="background:linear-gradient(145deg,#FEF3C7,#FDE68A)">🔥</div><div class="info"><h3>商品宣传爆款复刻</h3><p>复刻同款风格</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+        <div class="app" data-cat="model" data-name="多场景穿搭套图"><div class="app-img" style="background:linear-gradient(145deg,#ECFDF5,#D1FAE5)">👘</div><div class="info"><h3>多场景穿搭套图</h3><p>AI 模特穿搭展示</p><span class="use">立即使用 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></div></div>
+
+        <!-- 空状态（新增组件） -->
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6"/></svg>
+          <h3>未找到相关应用</h3>
+          <p>试试其他关键词或切换分类</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 客服 -->
+<button class="support" title="联系客服" onclick="toast('演示版：联系客服')">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<script>
+/* ===== 分类筛选 ===== */
+const tabs = document.querySelectorAll('#catTabs button');
+const apps = document.querySelectorAll('#appGrid .app');
+const emptyState = document.getElementById('emptyState');
+const searchInput = document.getElementById('searchInput');
+let currentCat = 'all';
+let currentQuery = '';
+
+function applyFilter(){
+  let visible = 0;
+  apps.forEach(a => {
+    const matchCat = currentCat === 'all' || a.dataset.cat === currentCat;
+    const matchQuery = !currentQuery || (a.dataset.name || '').toLowerCase().includes(currentQuery) || (a.querySelector('h3')||{}).textContent.toLowerCase().includes(currentQuery);
+    const show = matchCat && matchQuery;
+    a.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  emptyState.style.display = visible === 0 ? 'block' : 'none';
+}
+
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('on'));
+  t.classList.add('on');
+  currentCat = t.dataset.cat;
+  applyFilter();
+}));
+
+/* ===== 搜索（新增功能） ===== */
+searchInput.addEventListener('input', () => {
+  currentQuery = searchInput.value.trim().toLowerCase();
+  applyFilter();
+});
+
+/* ===== 卡片点击 ===== */
+apps.forEach(a => a.addEventListener('click', () => {
+  const name = a.querySelector('h3').textContent;
+  toast('演示版：进入「' + name + '」创作');
+}));
+
+/* ===== Toast ===== */
+function toast(msg){
+  let el=document.querySelector('.toast');
+  if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);
+}
+</script>
+</body>
+</html>

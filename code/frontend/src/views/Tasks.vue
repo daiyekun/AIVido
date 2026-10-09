@@ -1,9 +1,22 @@
 <template>
   <div>
-    <el-card class="panel">
-      <template #header>
-        <div class="panel-title">我的生成任务</div>
-      </template>
+    <!-- 页面标题 -->
+    <div class="page-title">
+      <h1>我的任务</h1>
+      <p>查看生成任务状态，下载产出图片</p>
+    </div>
+
+    <!-- 任务面板 -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="tt">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+          </svg>
+          生成记录
+        </span>
+        <span class="total-badge" v-if="total">共 {{ total }} 条</span>
+      </div>
 
       <el-table :data="items" v-loading="loading" stripe>
         <el-table-column label="任务" width="240">
@@ -15,7 +28,9 @@
         <el-table-column label="模型" prop="model_id" width="90" />
         <el-table-column label="状态" width="110">
           <template #default="{ row }">
-            <el-tag :type="STATUS_MAP[row.status]?.type">{{ STATUS_MAP[row.status]?.text }}</el-tag>
+            <el-tag :type="STATUS_MAP[row.status]?.type" effect="dark" round>
+              {{ STATUS_MAP[row.status]?.text }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="预估积分" prop="expect_credit" width="90" />
@@ -41,7 +56,12 @@
         </el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
-            <el-button v-if="row.output_asset_urls?.length" text type="primary" @click="download(row)">
+            <el-button
+              v-if="row.output_asset_urls?.length"
+              text
+              type="primary"
+              @click="download(row)"
+            >
               下载
             </el-button>
             <el-button
@@ -66,7 +86,7 @@
           @current-change="fetch"
         />
       </div>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -159,27 +179,81 @@ async function copyTrace(row) {
 </script>
 
 <style scoped>
+.page-title {
+  margin-bottom: 24px;
+}
+.page-title h1 {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  margin: 0;
+  color: var(--dj-text);
+}
+.page-title p {
+  font-size: 14px;
+  color: var(--dj-dim);
+  margin: 6px 0 0;
+}
+
 .panel {
-  margin-top: 16px;
+  background: var(--dj-card);
+  border: 1px solid var(--dj-line);
+  border-radius: var(--dj-r-lg);
+  padding: 22px 24px;
+  transition: var(--dj-t);
 }
-.panel-title {
-  font-weight: 600;
+.panel:hover {
+  border-color: var(--dj-line2);
 }
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.panel-head .tt {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--dj-sub);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel-head .tt svg {
+  width: 17px;
+  height: 17px;
+  stroke: var(--brand-cyan);
+}
+.total-badge {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--brand-cyan);
+  background: var(--brand-cyan-dim);
+  border: 1px solid rgba(16, 185, 225, 0.35);
+  padding: 4px 12px;
+  border-radius: var(--dj-r-full);
+}
+
 .task-id {
-  font-family: monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-weight: 600;
+  color: var(--dj-text);
 }
 .task-type {
-  color: #909399;
+  color: var(--dj-dim);
   font-size: 12px;
 }
 .thumb {
   width: 48px;
   height: 48px;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-right: 4px;
+  border: 1px solid var(--dj-line);
 }
 .muted {
-  color: #909399;
+  color: var(--dj-dim);
 }
 .pager {
   margin-top: 16px;

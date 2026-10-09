@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>登录 · 创意AI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Cpath d='M22 22l20 10-20 10z' fill='%23fff'/%3E%3Ccircle cx='46' cy='18' r='4' fill='%2310B9E1'/%3E%3C/svg%3E">
+<style>
+/* ========================================
+   创意AI · 统一设计系统（登录页）
+   ======================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brand:#0F172A; --brand2:#1E293B;
+  --cyan:#10B9E1; --cyan-dim:rgba(16,185,225,.12);
+  --orange:#F97316; --orange-dim:rgba(249,115,22,.12);
+  --violet:#8B5CF6;
+  --bg:#F8FAFC; --card:#FFFFFF; --card2:#F1F5F9;
+  --line:#E2E8F0; --ink:#0F172A; --sub:#64748B; --dim:#94A3B8;
+  --ok:#10B981; --err:#EF4444;
+  --shadow:0 4px 16px rgba(0,0,0,.08);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.12);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.16);
+  --r-sm:8px; --r:12px; --r-lg:16px; --r-xl:24px; --r-full:999px;
+  --t:all .22s cubic-bezier(.4,0,.2,1);
+}
+body{
+  font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",system-ui,sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(900px 520px at 10% -10%,rgba(16,185,225,.1),transparent 55%),
+    radial-gradient(800px 460px at 95% 110%,rgba(139,92,246,.1),transparent 55%),
+    var(--bg);
+  color:var(--ink);padding:24px;
+}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+
+/* ========================================
+   主容器
+   ======================================== */
+.shell{
+  width:100%;max-width:960px;min-height:640px;
+  border-radius:var(--r-xl);overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;
+  background:var(--card);border:1px solid var(--line);
+  box-shadow:var(--shadow-xl);
+}
+
+/* ========================================
+   左侧品牌区
+   ======================================== */
+.brand-panel{
+  position:relative;overflow:hidden;padding:48px 40px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(160deg,#0F172A 0%,#1E3A5F 55%,#0E7490 100%);
+  color:#fff;
+}
+.brand-panel::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 30% 50%,black,transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 30% 50%,black,transparent);
+}
+.brand-panel::after{
+  content:"";position:absolute;right:-100px;bottom:-100px;
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle,rgba(16,185,225,.25),transparent 65%);
+}
+.bp-top{display:flex;align-items:center;gap:14px;position:relative;z-index:2}
+.bp-logo{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.08));
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.bp-logo svg{width:26px;height:26px;stroke:#fff}
+.bp-top b{font-size:22px;letter-spacing:-.3px;display:block}
+.bp-top small{font-size:11px;font-weight:400;opacity:.7;letter-spacing:2.5px}
+.bp-mid{position:relative;z-index:2;margin:44px 0}
+.bp-mid h2{font-size:30px;line-height:1.3;font-weight:900;letter-spacing:-.5px;margin-bottom:16px}
+.bp-mid p{font-size:14.5px;line-height:1.8;opacity:.85;max-width:340px}
+.bp-mid .feats{margin-top:32px;display:flex;flex-direction:column;gap:15px}
+.bp-mid .feats span{display:flex;align-items:center;gap:12px;font-size:14px;opacity:.95;font-weight:500}
+.feats .fic{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  background:rgba(16,185,225,.2);border:1px solid rgba(16,185,225,.35);
+  display:flex;align-items:center;justify-content:center;
+}
+.feats .fic svg{width:14px;height:14px;stroke:#67E8F9;stroke-width:3}
+.bp-foot{position:relative;z-index:2;display:flex;gap:20px;font-size:12px;opacity:.6;flex-wrap:wrap}
+
+/* ========================================
+   右侧表单区
+   ======================================== */
+.form-panel{padding:48px 44px;display:flex;flex-direction:column;justify-content:center}
+.fp-head{text-align:center;margin-bottom:32px}
+.fp-head .logo-mobile{display:none}
+.fp-head h2{font-size:27px;font-weight:900;letter-spacing:-.5px}
+.fp-head p{color:var(--sub);font-size:14px;margin-top:8px}
+
+/* Tab 切换 */
+.tabs{
+  display:flex;background:var(--card2);
+  border:1px solid var(--line);border-radius:var(--r);
+  padding:5px;margin-bottom:28px;gap:5px;
+}
+.tabs button{
+  flex:1;padding:11px 0;border:none;background:transparent;
+  color:var(--sub);font-size:14px;font-weight:600;
+  border-radius:var(--r-sm);cursor:pointer;transition:var(--t);
+}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{
+  background:var(--brand);color:#fff;
+  box-shadow:0 4px 14px rgba(15,23,42,.25);
+}
+
+/* 输入组 */
+.field{position:relative;margin-bottom:22px}
+.field label{display:block;font-size:13.5px;color:var(--sub);margin-bottom:9px;font-weight:600}
+.control{
+  display:flex;align-items:center;
+  background:var(--card);border:1.5px solid var(--line);
+  border-radius:var(--r);padding:0 16px;transition:var(--t);
+}
+.control:focus-within{border-color:var(--cyan);box-shadow:0 0 0 4px var(--cyan-dim)}
+.control svg{width:18px;height:18px;stroke:var(--dim);flex-shrink:0}
+.control input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--ink);font-size:15px;padding:14px 12px;font-family:inherit;
+}
+.control input::placeholder{color:var(--dim)}
+.cap-btn{
+  white-space:nowrap;border:none;background:none;
+  color:var(--cyan);font-size:13.5px;font-weight:700;
+  cursor:pointer;font-family:inherit;padding-left:10px;transition:var(--t);
+}
+.cap-btn:hover{color:#0891B2}
+.cap-btn:disabled{color:var(--dim);cursor:not-allowed}
+
+/* 密码可见性 */
+.eye{background:none;border:none;cursor:pointer;color:var(--dim);display:flex;padding:4px;transition:var(--t)}
+.eye:hover{color:var(--ink)}
+.eye svg{width:18px;height:18px}
+
+/* 协议 */
+.agreements{margin:8px 0 24px;display:flex;flex-direction:column;gap:12px}
+.agree{
+  display:flex;gap:10px;align-items:flex-start;
+  font-size:12.5px;color:var(--sub);line-height:1.65;cursor:pointer;
+  transition:var(--t);
+}
+.agree:hover{color:var(--ink)}
+.agree input{
+  width:16px;height:16px;margin-top:2px;accent-color:var(--cyan);
+  flex-shrink:0;cursor:pointer;
+}
+.agree .hl{color:var(--cyan);font-weight:600;cursor:pointer}
+.agree .hl:hover{text-decoration:underline}
+
+/* 登录按钮 */
+.login-btn{
+  width:100%;padding:15px 0;border:none;border-radius:var(--r);
+  background:linear-gradient(135deg,var(--cyan),#0891B2);
+  color:#fff;font-size:16px;font-weight:700;font-family:inherit;
+  cursor:pointer;transition:var(--t);
+  box-shadow:0 6px 20px rgba(16,185,225,.35);
+}
+.login-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(16,185,225,.45)}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.login-tip{text-align:center;font-size:13px;color:var(--dim);margin-top:20px}
+.login-tip a{color:var(--cyan);font-weight:600}
+.login-tip a:hover{text-decoration:underline}
+.back-link{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-top:26px;font-size:13.5px;color:var(--dim);
+  transition:var(--t);align-self:center;
+}
+.back-link:hover{color:var(--ink);gap:10px}
+.back-link svg{width:16px;height:16px}
+
+/* 第三方登录（新增组件） */
+.oauth{margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
+.oauth-label{
+  text-align:center;font-size:12.5px;color:var(--dim);
+  margin-bottom:16px;position:relative;
+}
+.oauth-label::before,.oauth-label::after{
+  content:"";position:absolute;top:50%;width:calc(50% - 60px);
+  height:1px;background:var(--line);
+}
+.oauth-label::before{left:0}
+.oauth-label::after{right:0}
+.oauth-row{display:flex;gap:12px;justify-content:center}
+.oauth-row button{
+  width:46px;height:46px;border-radius:var(--r);
+  border:1.5px solid var(--line);background:var(--card);
+  cursor:pointer;transition:var(--t);
+  display:flex;align-items:center;justify-content:center;
+}
+.oauth-row button:hover{border-color:var(--cyan);transform:translateY(-2px);box-shadow:var(--shadow)}
+.oauth-row button svg{width:22px;height:22px}
+
+/* ========================================
+   Toast
+   ======================================== */
+.toast{
+  position:fixed;left:50%;bottom:48px;transform:translateX(-50%) translateY(20px);
+  background:var(--brand);color:#fff;padding:13px 28px;
+  border-radius:var(--r-full);font-size:14px;font-weight:500;
+  z-index:9999;box-shadow:0 12px 40px rgba(0,0,0,.3);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  opacity:0;pointer-events:none;max-width:86vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ========================================
+   响应式
+   ======================================== */
+@media(max-width:760px){
+  .shell{grid-template-columns:1fr;max-width:460px;min-height:auto}
+  .brand-panel{display:none}
+  .fp-head .logo-mobile{
+    display:flex;align-items:center;gap:12px;
+    justify-content:center;margin-bottom:24px;
+  }
+  .fp-head .logo-mobile .brand-logo{
+    width:44px;height:44px;border-radius:12px;
+    background:linear-gradient(135deg,var(--brand),var(--cyan));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(15,23,42,.2);
+  }
+  .fp-head .logo-mobile .brand-logo svg{width:24px;height:24px;stroke:#fff}
+  .fp-head .logo-mobile b{font-size:20px;letter-spacing:-.3px}
+  .form-panel{padding:40px 28px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ===== 左侧品牌区 ===== -->
+  <aside class="brand-panel">
+    <div class="bp-top">
+      <span class="bp-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </span>
+      <div><b>创意AI</b><small>创意无界 · AI 生成</small></div>
+    </div>
+    <div class="bp-mid">
+      <h2>一站式 AI 多媒体<br>创意平台</h2>
+      <p>专注电商领域 AIGC，图片、文案、视频全链路专业服务。</p>
+      <div class="feats">
+        <span>
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          40+ 专业电商创作应用
+        </span>
+        <span>
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          批量出图 · 爆款复刻 · 模特换装
+        </span>
+        <span>
+          <span class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
+          AI 视频生成与无限画布创作
+        </span>
+      </div>
+    </div>
+    <div class="bp-foot">
+      <span>ICP：京18888888000</span>
+      <span>京18888888000</span>
+    </div>
+  </aside>
+
+  <!-- ===== 右侧表单区 ===== -->
+  <div class="form-panel">
+    <div class="fp-head">
+      <div class="logo-mobile">
+        <span class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        <b>创意AI</b>
+      </div>
+      <h2>欢迎登录</h2>
+      <p>选择你喜欢的登录方式，开始你的 AI 之旅</p>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button type="button" class="on" data-mode="phone">手机登录</button>
+      <button type="button" data-mode="email">邮箱登录</button>
+      <button type="button" data-mode="password">密码登录</button>
+    </div>
+
+    <form id="loginForm" novalidate>
+      <!-- 手机号 / 邮箱 输入 -->
+      <div class="field">
+        <label id="accountLabel" for="account">手机号码</label>
+        <div class="control">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+          <input type="text" id="account" placeholder="请输入手机号码" autocomplete="username">
+        </div>
+      </div>
+
+      <!-- 验证码组 -->
+      <div class="field" id="codeField">
+        <label for="code">验证码</label>
+        <div class="control">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="text" id="code" placeholder="请输入验证码" autocomplete="one-time-code">
+          <button type="button" class="cap-btn" id="capBtn">获取验证码</button>
+        </div>
+      </div>
+
+      <!-- 密码组 -->
+      <div class="field" id="pwdField" style="display:none">
+        <label for="password">密码</label>
+        <div class="control">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password">
+          <button type="button" class="eye" id="eyeBtn" aria-label="显示密码">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="agreements">
+        <label class="agree"><input type="checkbox" id="agree1" checked><span>我是合法企业 / 个体工商户，仅用于自身电商经营，不用于公众传播、舆论、社交及违法场景</span></label>
+        <label class="agree"><input type="checkbox" id="agree2" checked><span>我对输入内容、生成内容的合法性、知识产权承担全部责任</span></label>
+        <label class="agree"><input type="checkbox" id="agree3" checked><span>我已阅读并同意 <span class="hl" onclick="toast('演示版：用户协议')">用户协议</span> 和 <span class="hl" onclick="toast('演示版：隐私政策')">隐私政策</span></span></label>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">立即登录</button>
+      <div class="login-tip" id="formTip">还没有账号？<a href="#" onclick="toast('演示版：可联系客服开通账号');return false">联系客服开通</a></div>
+    </form>
+
+    <!-- 第三方登录（新增组件） -->
+    <div class="oauth">
+      <div class="oauth-label">其他登录方式</div>
+      <div class="oauth-row">
+        <button type="button" onclick="toast('演示版：微信登录')" aria-label="微信登录">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A5.5 5.5 0 1 0 6 9c0 .85.27 1.64.74 2.28L6 14l2.5-1.13"/><path d="M16 17.5a5.5 5.5 0 1 1-4.86-7.55"/><path d="M14.5 16c.7 1.6 2.3 2.75 4.15 2.75.35 0 .69-.04 1.01-.12L21 20l-.65-1.85A5.46 5.46 0 0 0 21 16.5"/></svg>
+        </button>
+        <button type="button" onclick="toast('演示版：QQ登录')" aria-label="QQ登录">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15c1.5 1.5 2.5 2 4 2s2.5-.5 4-2"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/></svg>
+        </button>
+        <button type="button" onclick="toast('演示版：支付宝登录')" aria-label="支付宝登录">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 14c2-3 5-5 10-5"/><path d="M12 7v8"/><path d="M8 17c3 1 7 1 10-1"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <a class="back-link" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      返回首页
+    </a>
+  </div>
+</div>
+
+<script>
+/* ===== Tab 切换 ===== */
+const tabs = document.querySelectorAll('#tabs button');
+const codeField = document.getElementById('codeField');
+const pwdField = document.getElementById('pwdField');
+const accountLabel = document.getElementById('accountLabel');
+const account = document.getElementById('account');
+const capBtn = document.getElementById('capBtn');
+let current = 'phone';
+
+tabs.forEach(btn => btn.addEventListener('click', () => {
+  tabs.forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  current = btn.dataset.mode;
+  if (current === 'phone') {
+    accountLabel.textContent = '手机号码';
+    account.placeholder = '请输入手机号码';
+    codeField.style.display = 'block';
+    pwdField.style.display = 'none';
+  } else if (current === 'email') {
+    accountLabel.textContent = '邮箱地址';
+    account.placeholder = '请输入邮箱地址';
+    codeField.style.display = 'block';
+    pwdField.style.display = 'none';
+  } else {
+    accountLabel.textContent = '手机号码 / 邮箱';
+    account.placeholder = '请输入手机号码或邮箱';
+    codeField.style.display = 'none';
+    pwdField.style.display = 'block';
+  }
+}));
+
+/* ===== 密码可见性 ===== */
+document.getElementById('eyeBtn').addEventListener('click', e => {
+  const p = document.getElementById('password');
+  p.type = p.type === 'password' ? 'text' : 'password';
+  e.currentTarget.classList.toggle('on');
+});
+
+/* ===== 获取验证码（模拟倒计时） ===== */
+let capTimer = null;
+capBtn.addEventListener('click', () => {
+  if (capBtn.disabled) return;
+  const v = account.value.trim();
+  const ok = current === 'phone' ? /^1\d{10}$/.test(v) : /.+@.+\..+/.test(v);
+  if (!ok) {
+    toast(current === 'phone' ? '请先输入正确的手机号码' : '请先输入正确的邮箱地址');
+    account.focus();
+    return;
+  }
+  let n = 60;
+  capBtn.disabled = true;
+  capBtn.textContent = n + 's 后重发';
+  capTimer = setInterval(() => {
+    n--;
+    if (n <= 0) {
+      clearInterval(capTimer);
+      capBtn.disabled = false;
+      capBtn.textContent = '获取验证码';
+    } else {
+      capBtn.textContent = n + 's 后重发';
+    }
+  }, 1000);
+});
+
+/* ===== 协议校验 + 提交 ===== */
+document.getElementById('loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const c1 = document.getElementById('agree1').checked;
+  const c2 = document.getElementById('agree2').checked;
+  const c3 = document.getElementById('agree3').checked;
+  if (!(c1 && c2 && c3)) {
+    toast('请勾选确认，方可注册/登录');
+    return;
+  }
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = '登录中…';
+  setTimeout(() => {
+    toast('演示版：登录成功，正在进入工作台');
+    setTimeout(() => location.href = 'dashboard.html', 800);
+  }, 600);
+});
+
+/* ===== Toast ===== */
+function toast(msg){
+  let el=document.querySelector('.toast');
+  if(!el){el=document.createElement('div');el.className='toast';document.body.appendChild(el)}
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);
+}
+</script>
+</body>
+</html>

@@ -30,7 +30,15 @@ api.interceptors.response.use(
   (err) => {
     if (err.response && err.response.status === 401) {
       localStorage.removeItem('token')
+      localStorage.removeItem('is_admin')
       window.location.href = '/login'
+    }
+    const body = err.response && err.response.data
+    if (body && typeof body === 'object' && body.msg) {
+      const e2 = new Error(body.msg)
+      e2.code = body.code
+      e2.traceId = body.trace_id
+      return Promise.reject(e2)
     }
     return Promise.reject(err)
   },

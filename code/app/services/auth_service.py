@@ -59,6 +59,8 @@ async def login(db: AsyncSession, phone: str, code: str) -> dict[str, object]:
         "token": token,
         "expire_days": settings.jwt_expire_days,
         "user_id": user.id,
+        "phone": user.phone,
+        "is_admin": bool(user.is_admin),
     }
 
 
