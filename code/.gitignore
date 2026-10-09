@@ -8,6 +8,7 @@ __pycache__/
 .ruff_cache/
 dist/
 build/
+node_modules/
 logs/
 *.log
 .coverage

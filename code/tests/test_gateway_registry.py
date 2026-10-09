@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 import pytest
 
 from app.infrastructure.gateway.errors import (
@@ -20,14 +22,14 @@ def test_stub_adapter_registered():
 
 def test_stub_adapter_dispatch():
     adapter = resolve_adapter("stub", {})
-    result = adapter.txt2img({}, "trace-123")
+    result = asyncio.run(adapter.txt2img({}, "trace-123"))
     assert result.provider_task_id == "stub-txt2img"
 
 
 def test_unsupported_method_raises():
     adapter = resolve_adapter("stub", {})
     with pytest.raises(AdapterNotSupportedError):
-        adapter.vid2vid({}, "trace-123")
+        asyncio.run(adapter.vid2vid({}, "trace-123"))
 
 
 def test_unknown_adapter_raises():

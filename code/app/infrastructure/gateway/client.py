@@ -78,8 +78,18 @@ class GatewayClient:
                     raise ModelCallTransportError(str(exc)) from exc
 
                 if resp.status_code >= 400:
+                    detail = ""
+                    try:
+                        body = resp.json()
+                        code = body.get("code") or ""
+                        message = body.get("message") or ""
+                        if code or message:
+                            detail = f" | {code} {message}".strip()
+                    except Exception:  # noqa: BLE001
+                        pass
                     raise ModelCallHttpError(
-                        f"model http error {resp.status_code}", status_code=resp.status_code
+                        f"model http error {resp.status_code}{detail}",
+                        status_code=resp.status_code,
                     )
                 return resp
 

@@ -24,7 +24,10 @@ class AdapterResult:
 
 
 class BaseModelAdapter(ABC):
-    """模型适配器抽象基类。新增厂商只需实现本类并注册，业务侧零改动。"""
+    """模型适配器抽象基类。新增厂商只需实现本类并注册，业务侧零改动。
+
+    能力方法统一为 async：真实厂商调用走统一异步 HTTP 客户端（超时/重试/埋点）。
+    """
 
     def __init__(self, model_conf: dict[str, Any]):
         self.model_conf = model_conf
@@ -39,25 +42,25 @@ class BaseModelAdapter(ABC):
             return True
         return method.__func__ is not base_method
 
-    def txt2img(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def txt2img(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("txt2img")
 
-    def img2img(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def img2img(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("img2img")
 
-    def txt2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def txt2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("txt2vid")
 
-    def img2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def img2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("img2vid")
 
-    def vid2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def vid2vid(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("vid2vid")
 
-    def vid_edit(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
+    async def vid_edit(self, params: dict[str, Any], trace_id: str) -> AdapterResult:
         raise AdapterNotSupportedError("vid_edit")
 
-    def chat_completion(
+    async def chat_completion(
         self, messages: list[dict[str, Any]], params: dict[str, Any], trace_id: str
     ) -> AdapterResult:
         raise AdapterNotSupportedError("chat_completion")

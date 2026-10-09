@@ -41,3 +41,13 @@ def is_retryable(exc: BaseException) -> bool:
     if isinstance(exc, GatewayError):
         return exc.retryable
     return isinstance(exc, (TimeoutError, ConnectionError, OSError))
+
+
+def error_code_of(exc: BaseException) -> str:
+    if isinstance(exc, ModelCallTimeoutError):
+        return "50002"
+    if isinstance(exc, (AdapterNotRegisteredError, AdapterNotSupportedError)):
+        return "30003"
+    if isinstance(exc, (ModelCallHttpError, ModelCallTransportError)):
+        return "50001"
+    return "50001"

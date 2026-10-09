@@ -90,6 +90,14 @@ def _on_worker_process_init(**kwargs: Any) -> None:
 
     setup_logging(service_name="ainew-worker")
     init_tracing(service_name="ainew-worker")
+    try:
+        from app.infrastructure.storage import minio_client
+
+        minio_client.ensure_buckets()
+    except Exception:  # noqa: BLE001
+        import logging
+
+        logging.getLogger("ainew.worker").warning("minio_bucket_init_failed", exc_info=True)
 
 
 signals.worker_process_init.connect(_on_worker_process_init, weak=False)

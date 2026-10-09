@@ -34,7 +34,8 @@ async def _check_rate_limit(phone: str) -> None:
 
 async def send_sms_code(phone: str) -> None:
     _validate_phone(phone)
-    await _check_rate_limit(phone)
+    if not settings.dev_sms_endpoint:
+        await _check_rate_limit(phone)
 
     code = settings.sms_dev_fixed_code or secrets.randbelow(900000) + 100000
     code_key = CODE_KEY_PREFIX + phone
@@ -64,6 +65,10 @@ async def verify_sms_code(phone: str, code: str) -> None:
     _validate_phone(phone)
     if not code:
         raise ParamError("验证码不能为空")
+    if settings.dev_sms_endpoint:
+        if code != settings.sms_dev_fixed_code:
+            raise SmsCodeError()
+        return
     code_key = CODE_KEY_PREFIX + phone
     stored = await cache_get(code_key)
     if stored is None or stored != code:

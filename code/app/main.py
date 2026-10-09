@@ -12,10 +12,17 @@ from app.core.response import ok
 from app.core.tracing import init_tracing
 from app.infrastructure.cache.redis_client import close_redis
 from app.infrastructure.db.session import dispose_engine
+from app.infrastructure.storage import minio_client
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    try:
+        minio_client.ensure_buckets()
+    except Exception:
+        import logging
+
+        logging.getLogger("ainew").warning("minio_bucket_init_failed", exc_info=True)
     yield
     await close_redis()
     await dispose_engine()
